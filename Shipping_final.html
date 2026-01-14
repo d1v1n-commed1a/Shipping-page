@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>온라인 쇼핑몰 고객 주문 처리 프로그램</title>
+  <style>
+    body{
+      font-family: system-ui, sans-serif;
+      line-height: 1.6;
+      margin: 0px;
+      padding: 0px;
+    }
+    .layout{
+      display: grid;
+      grid-template-areas:
+        "header header"
+        "content sidebar";
+      grid-template-columns: 1fr 300px;
+      grid-template-rows: 60px 1fr;
+      height: 100vh;
+    }
+    header{
+      grid-area: header;
+      background: #1e7a3b;
+      color: rgb(255, 255, 255);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+    }
+    aside{
+      grid-area: sidebar;
+      background: #ecf0f1;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding:20px;
+      font-size: 14px;
+    }
+    main{
+      max-width: 1220px;
+      position: relative;
+      padding: 20px;
+      padding-top: 0px;
+      font-size: 90%;
+      align-items: center;
+    }
+    .sticky{
+      position: sticky;
+      top: 20px;
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: #79b861;
+      color: white;
+      padding: 16px;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    img {
+      max-width: fit-content;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <header>
+      <h2><strong>🥒오이 마트</strong></h2>
+      <nav><small>Log in | Sign in</small></nav>
+    </header>
+
+    <main>
+      <h3>📌 모든 오이의 가격을 동결합니다.</h3>
+      <div class="card-grid">
+        <div class="card">
+          <div style="align-self: center; font-size: 15px; color: #255014;"><strong>싱싱한 오이</strong></div><hr>
+          <img src="media/strong.jpg" alt="먹으면 튼튼해지는 오이"/>
+          <p>5,000원 /kg</p>
+          <form class="orderForm" data-name="싱싱한 오이" data-price="5000" data-stock="10" style="align-self: center;">
+            <p>
+              <label>구매 수량</label>
+              <input class="orderAmount" name="orderAmount" type="number" placeholder="예: 1" />
+            </p>
+            <button type="submit">장바구니에 담기</button>
+          </form>
+        </div>
+
+        <div class="card">
+          <div style="align-self: center; font-size: 15px; color: #255014;"><strong>할머니가 텃밭에서 기른 오이</strong></div><hr>
+          <img src="media/grandma.jpg" alt="할머니의 비밀스러운 오이"/>
+          <p>5,000원 /kg</p>
+          <form class="orderForm" data-name="할머니가 텃밭에서 기른 오이" data-price="5000" data-stock="10" style="align-self: center;">
+            <p>
+              <label>구매 수량</label>
+              <input class="orderAmount" name="orderAmount" type="number" placeholder="예: 1" />
+            </p>
+            <button type="submit">장바구니에 담기</button>
+          </form>
+        </div>
+
+        <div class="card">
+          <div style="align-self: center; font-size: 15px; color: #255014;"><strong>약간 쪼글해진 오이</strong></div><hr>
+          <img src="media/ugly.jpg" alt="못생긴 오이"/>
+          <p>5,000원 /kg</p>
+          <form class="orderForm" data-name="약간 쪼글해진 오이" data-price="5000" data-stock="10" style="align-self: center;">
+            <p>
+              <label>구매 수량</label>
+              <input class="orderAmount" name="orderAmount" type="number" placeholder="예: 1" />
+            </p>
+            <button type="submit">장바구니에 담기</button>
+          </form>
+        </div>
+
+        <div class="card">
+          <div style="align-self: center; font-size: 15px; color: #255014;"><strong>오이(과거형)</strong></div><hr>
+          <img src="media/pickle.jpg" alt="피클이 되어버린 오이"/>
+          <p>5,000원 /kg</p>
+          <form class="orderForm" data-name="오이(과거형)" data-price="5000" data-stock="10" style="align-self: center;">
+            <p>
+              <label>구매 수량</label>
+              <input class="orderAmount" name="orderAmount" type="number" placeholder="예: 1" />
+            </p>
+            <button type="submit">장바구니에 담기</button>
+          </form>
+        </div>
+      </div>
+    </main>
+
+    <aside>
+      <div>Membership</div>
+      <select id="membership">
+        <option value="">-- 선택 --</option>
+        <option value="VIP">VIP</option>
+        <option value="Gold">Gold</option>
+        <option value="Silver">Silver</option>
+      </select>
+
+      <div style="margin-top: 12px;">배송 방법</div>
+      <select id="shippingOption">
+        <option value="">-- 선택 --</option>
+        <option value="fast">Fast (+3,000원)</option>
+        <option value="standard">Standard</option>
+      </select>
+
+      <hr style="margin: 16px 0;">
+
+      <div class="sticky">
+        <h3 style="margin: 0 0 10px;">🧺 장바구니</h3>
+        <div id="cartList" style="display:flex; flex-direction:column; gap:8px;"></div>
+        <hr style="margin: 16px 0;">
+
+        <div style="display:flex; flex-direction:column; gap:6px;">
+          <div style="display:flex; justify-content:space-between;">
+            <span>선택금액</span><strong id="sumBase">0원</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between;">
+            <span>할인</span><strong id="sumDiscount">0원</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between;">
+            <span>배송비</span><strong id="sumShipping">0원</strong>
+          </div>
+          <hr style="margin: 8px 0;">
+          <div style="display:flex; justify-content:space-between; font-size:16px;">
+            <span><strong>최종금액</strong></span><strong id="sumFinal">0원</strong>
+          </div>
+
+          <button id="clearCart" type="button" style="margin-top:10px; padding:10px; border:0; border-radius:8px; cursor:pointer;">
+            장바구니 비우기
+          </button>
+          <button id="payBtn" type="button" style="margin-top:3px; padding:1px; border:0; border-radius:8px; cursor:pointer;">
+            <strong style="font-size: 20px;">결제하기</strong>
+          </button>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <script>
+    // 할인 적용 내용
+    const elMembership = document.getElementById("membership");
+    const elShippingOption = document.getElementById("shippingOption");
+    // 장바구니 내용
+    const elSumBase = document.getElementById("sumBase");
+    const elSumDiscount = document.getElementById("sumDiscount");
+    const elSumShipping = document.getElementById("sumShipping");
+    const elSumFinal = document.getElementById("sumFinal");
+    // 장바구니 버튼
+    const elClearCart = document.getElementById("clearCart");
+    const elPayBtn = document.getElementById("payBtn");
+
+    const cart = new Map();
+    const KRW = (n) => `${Math.round(n).toLocaleString("ko-KR")}원`;
+
+    function calcBaseTotal() {
+      let total = 0;
+      for (const item of cart.values()) total += item.price * item.qty;
+      return total;
+    }
+
+    function processOrder(baseTotal, membership, shippingOption) {
+      let memberDiscount = 0;
+      if (membership === "VIP") memberDiscount = baseTotal * 0.10;
+      else if (membership === "Gold") memberDiscount = baseTotal * 0.05;
+
+      const afterMember = baseTotal - memberDiscount;
+
+      let extraDiscount = 0;
+      if (afterMember >= 200000) extraDiscount = 15000;
+      else if (afterMember >= 100000) extraDiscount = 5000;
+
+      const discountTotal = memberDiscount + extraDiscount;
+
+      const hasItem = baseTotal > 0;
+      const shippingFee = (shippingOption === "fast" && hasItem) ? 3000 : 0;
+
+      const finalTotal = Math.max(0, baseTotal - discountTotal + shippingFee);
+
+      return { discountTotal, shippingFee, finalTotal };
+    }
+
+    function updateSummaryUI() {
+      const baseTotal = calcBaseTotal();
+      const membership = elMembership.value;
+      const shippingOption = elShippingOption.value;
+
+      const { discountTotal, shippingFee, finalTotal } = processOrder(baseTotal, membership, shippingOption);
+
+      elSumBase.textContent = KRW(baseTotal);
+      elSumDiscount.textContent = discountTotal > 0 ? `- ${KRW(discountTotal)}` : "0원";
+      elSumShipping.textContent = KRW(shippingFee);
+      elSumFinal.textContent = KRW(finalTotal);
+    }
+
+    function resetAll() {
+      cart.clear();
+      elMembership.value = "";
+      elShippingOption.value = "";
+      document.querySelectorAll(".orderAmount").forEach((inp) => (inp.value = ""));
+      updateSummaryUI();
+    }
+
+    document.querySelectorAll(".orderForm").forEach((form) => {
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const name = form.dataset.name;
+        const price = Number(form.dataset.price);
+        const stock = Number(form.dataset.stock);
+
+        const qty = Number(form.querySelector(".orderAmount").value);
+
+        if (!Number.isFinite(qty) || qty <= 0) {
+          alert("구매 수량을 올바르게 입력해주세요. 예: 1, 2, 3");
+          return;
+        }
+
+        const prev = cart.get(name);
+        const nextQty = (prev ? prev.qty : 0) + qty;
+
+        if (nextQty > stock) {
+          alert(`재고가 부족합니다. 현재 재고: ${stock}kg`);
+          return;
+        }
+
+        cart.set(name, { name, price, stock, qty: nextQty });
+        form.querySelector(".orderAmount").value = "";
+        updateSummaryUI();
+      });
+    });
+
+    elMembership.addEventListener("change", updateSummaryUI);
+    elShippingOption.addEventListener("change", updateSummaryUI);
+
+    elClearCart.addEventListener("click", resetAll);
+
+    elPayBtn.addEventListener("click", () => {
+      const baseTotal = calcBaseTotal();
+      if (baseTotal <= 0) {
+        alert("장바구니가 비어있습니다.");
+        return;
+      }
+
+      const membership = elMembership.value;
+      const shippingOption = elShippingOption.value;
+      const { finalTotal } = processOrder(baseTotal, membership, shippingOption);
+
+      alert(`결제가 완료되었습니다.\n최종 결제 금액은 ${KRW(finalTotal)} 입니다.`);
+    });
+
+    updateSummaryUI();
+  </script>
+</body>
+</html>
